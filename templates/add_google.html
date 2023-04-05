@@ -1,0 +1,43 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Add Happy Hour {% endblock title %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-8">
+
+      <h1>Add New Happy Hour</h1>
+      <form method="POST" action="{{ url_for('add') }}">
+        {{ form.csrf_token }}
+        <div>
+          {{ form.location.label }} <br> {{ form.location() }}
+          <br>
+        </div>
+        <div>
+          {{ form.business_hh_description.label }} <br>
+          {{ form.business_hh_description(rows=5, cols=100, class_='form-control') }}
+          <br>
+        </div>
+        <div>
+          {{ form.submit() }}
+        </div>
+
+      </form>
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&libraries=places"></script>
+  <script>
+    var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {});
+  </script>
+{% endblock scripts %}

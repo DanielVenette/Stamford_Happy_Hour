@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!--
+	Arcana by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html><head>
+<!--	Google Maps JavaScript API script tag	-->
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ key }}"></script>
+<!--	Google Places API script tag (key same as Google Maps)	-->
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&libraries=places"></script>
+
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>HHF (Google)</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+		<style>
+			#map {
+				height: 0;
+				width: 100%;
+				padding-bottom: 60%;
+			}
+		</style>
+		<link rel="stylesheet" href="static/assets/css/main.css">
+	</head>
+	<body class="">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header">
+
+					<!-- Logo -->
+						<h1><a href="#" id="logo">Stamford Happy Hour</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav" style="position: sticky; top: 0 !important;">
+							<ul>
+								<li class="current" style="white-space: nowrap;"><a href="#header">Home</a></li>
+								<li style="white-space: nowrap;"><a href="#finder">Find</a></li>
+								<li style="white-space: nowrap;"><a href=" {{ url_for('add') }}">Add</a></li>
+								<li style="white-space: nowrap;"><a href=#contact_me>Contact</a></li>
+							</ul>
+						</nav>
+
+				</div>
+
+			<!-- Banner -->
+				<section id="banner">
+					<header>
+						<h6>Photo by <a href="https://unsplash.com/de/@dbeamer_jpg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Drew Beamer</a> on <a href="https://unsplash.com/photos/bTN-zKFy9uA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></h6>
+<!--						<a href="#" class="button">Learn More</a>-->
+					</header>
+				</section>
+
+			<!-- Highlights -->
+				<section id="finder" class="wrapper style1">
+					<br>
+					<div class="container">
+						<div class="row gtr-200">
+							<section class="col-6 col-12-narrower">
+								<div id="map">
+
+								</div>
+							</section>
+							<section class="col-6 col-12-narrower">
+								<div style="flex: 1; height: 340px; overflow-y: scroll; padding: 20px;" id="biz-list">
+									<ol>
+									{% for business in business_info %}
+										<li style="font-weight:bold" id="{{ business[0] }}"><a href="javascript:void(0);">{{ business[1] }}</a></li>
+										<p style="margin: 0 0 1em 0;">Special: {{ business[2] }}<span>
+											<br><a href="{{ url_for('edit', record_id=business[0]) }}">Edit</a>
+										| <a href="{{ url_for('delete', record_id=business[0]) }}">Delete</a>
+										</span></p>
+
+									{% endfor %}
+									</ol>
+								</div>
+							</section>
+						</div>
+					</div>
+						<br>
+				</section>
+
+
+			<!-- CTA -->
+				<section class="wrapper style3" id="contact_me">
+					<div class="container">
+						<header class="major" style="text-alight: center;">
+							<h2>Do you enjoy this website?</h2>
+							<p style="color: white;">Engage with the developer by clicking one of the links below:</p>
+<!--							<a href="#" class="button">Insert Coin</a>-->
+						</header>
+					</div>
+				</section>
+
+			<!-- Footer -->
+				<div id="footer">
+
+					<!-- Icons -->
+						<ul class="icons">
+							<li><a href="https://twitter.com/danvenette" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+<!--							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>-->
+							<li><a href="https://github.com/DanielVenette" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/danielvenette/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+<!--							<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>-->
+						</ul>
+
+					<!-- Copyright -->
+						<div class="copyright">
+							<ul class="menu">
+								<li><a href="mailto:danvenette@gmail.com">danvenette@gmail.com</a></li><li>Design: <a href="https://html5up.net/arcana">Arcana | HTML5 UP</a></li>
+							</ul>
+						</div>
+
+				</div>
+
+		</div>
+
+		<!-- Scripts -->
+			<script>
+				function initMap() {}
+
+				window.onload = function() {
+				  var map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 15,
+					center: {lat: 41.0534, lng: -73.5387}
+				  });
+
+				  var markers = {{ business_info|tojson }}
+<!--keep track of open windows -->
+				  var openInfoWindow = null;
+
+				  for (var i = 0; i < markers.length; i++) {
+					createMarkerAndInfoWindow(i, markers, map);
+				  }
+<!--add a listener to the map that closes the currently open infowindow -->
+				  google.maps.event.addListener(map, 'click', function() {
+					if (openInfoWindow) {
+					  openInfoWindow.close();
+					}
+				  });
+
+				  function createMarkerAndInfoWindow(index, markers, map){
+					var marker = new google.maps.Marker({
+						position: {lat: markers[index][3], lng: markers[index][4]},
+						map: map,
+						title: markers[index][1],
+						description: markers[index][2],
+						record_id: markers[index][0]
+					});
+
+					var infowindow = new google.maps.InfoWindow({
+						content: '<div style="font-weight:bold">' + marker.title + '</div><div>' +
+							"Special: " + marker.description + '</div>'
+					});
+
+					marker.addListener('click', function() {
+<!--					  close currently open window before opening another-->
+					  if (openInfoWindow) {
+					  	openInfoWindow.close();
+					  }
+					  infowindow.open(map, marker);
+					  openInfoWindow = infowindow;
+					  scrollToItem(markers[index][0]);
+					});
+
+<!--					get teh list item corresponding to the marker's record_id-->
+					var listItem = document.getElementById(marker.record_id);
+
+<!--					add a click listener to that list item-->
+					listItem.addEventListener('click', function() {
+						if (openInfoWindow) {
+							openInfoWindow.close();
+						}
+						infowindow.open(map, marker);
+						openInfoWindow = infowindow;
+					});
+ 				  }
+
+ 				  function scrollToItem(id) {
+ 				  	var item = document.getElementById(id);
+ 				  	var container = document.querySelector('#biz-list');
+					container.scroll({
+					  top: item.offsetTop - container.offsetTop,
+					  behavior: 'smooth'
+					});
+ 				  }
+				}
+			</script>
+			<script src="static/assets/js/jquery.min.js"></script>
+			<script src="static/assets/js/jquery.dropotron.min.js"></script>
+			<script src="static/assets/js/browser.min.js"></script>
+			<script src="static/assets/js/breakpoints.min.js"></script>
+			<script src="static/assets/js/util.js"></script>
+			<script src="static/assets/js/main.js"></script>
+
+</body></html>
