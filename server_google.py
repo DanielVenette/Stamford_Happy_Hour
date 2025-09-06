@@ -15,7 +15,7 @@ GAPIKEY = os.environ.get('GAPIKEY')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASKSECRETKEY')
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:g04Postgres@localhost/happy_hour_stamford'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:g04Postgres@localhost/happy_hour_astoria'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 load_dotenv()
@@ -78,7 +78,7 @@ def add():
         description = form.business_hh_description.data
 
         conn = psycopg2.connect(
-            dbname="happy_hour_stamford",
+            dbname="happy_hour_astoria",
             user="postgres",
             password="g04Postgres",
             host="localhost"
