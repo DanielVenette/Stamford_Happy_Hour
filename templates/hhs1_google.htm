@@ -32,7 +32,7 @@
 				<div id="header">
 
 					<!-- Logo -->
-						<h1><a href="#" id="logo">Stamford Happy Hour</a></h1>
+                                                <h1><a href="#" id="logo">Astoria Happy Hour</a></h1>
 
 					<!-- Nav -->
 						<nav id="nav" style="position: sticky; top: 0 !important;">
@@ -123,10 +123,10 @@
 				function initMap() {}
 
 				window.onload = function() {
-				  var map = new google.maps.Map(document.getElementById('map'), {
-					zoom: 15,
-					center: {lat: 41.0534, lng: -73.5387}
-				  });
+                                  var map = new google.maps.Map(document.getElementById('map'), {
+                                        zoom: 15,
+                                        center: {lat: 40.7644, lng: -73.9235}
+                                  });
 
 				  var markers = {{ business_info|tojson }}
 <!--keep track of open windows -->

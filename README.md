@@ -1,6 +1,6 @@
-# Stamford Happy Hour Finder 🍻🗺️
+# Astoria Happy Hour Finder 🍻🗺️
 
-Stamford Happy Hour Finder is a responsive website that helps users find happy hour deals in Stamford, Connecticut. It integrates the Google Maps API and a PostgreSQL database, and is built using the Flask framework and Bootstrap for responsive design.
+Astoria Happy Hour Finder is a responsive website that helps users find happy hour deals in Astoria, New York. It integrates the Google Maps API and a PostgreSQL database, and is built using the Flask framework and Bootstrap for responsive design.
 
 Check out the live website at 👉 http://dancodes4376.pythonanywhere.com
 
